@@ -64,8 +64,7 @@ A modernized external ESP featuring a sleek blue-accented UI, animated network p
 
 ## 💫 Credits
 
-* All [contributors](https://github.com/dexifyink/MOONLIGHT/graphs/contributors) who have helped improve the project!
-* [**a2x**](https://github.com/a2x) for the [offset dumper](https://github.com/a2x/cs2-dumper) and constant updates!
+* DEXTER
 
 
 The content of this project is © by [DEXTER](https://github.com/dexifyink) and the respective contributors. See the [LICENSE](LICENSE) file for details.
