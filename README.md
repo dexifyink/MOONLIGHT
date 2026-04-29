@@ -4,10 +4,10 @@
 
 ### *External ESP for Counter-Strike 2*
 
-<img src="https://img.shields.io/github/downloads/dexifyink/MOONLIGHT/total?style=for-the-badge&color=0096ff&t=1&label=DOWNLOADS" alt="Downloads">
-<img src="https://img.shields.io/github/v/release/dexifyink/MOONLIGHT?style=for-the-badge&color=0096ff&t=1&label=LATEST" alt="Latest Release">
-<img src="https://img.shields.io/github/stars/dexifyink/MOONLIGHT?style=for-the-badge&color=0096ff&t=1&label=STARS" alt="Stars">
-<img src="https://img.shields.io/github/license/dexifyink/MOONLIGHT?style=for-the-badge&color=0096ff&t=1&label=LICENSE" alt="License">
+<img src="https://img.shields.io/github/downloads/dexifyink/MOONLIGHT/total?style=for-the-badge&color=0096ff&t=1745898420&label=DOWNLOADS" alt="Downloads">
+<img src="https://img.shields.io/github/v/release/dexifyink/MOONLIGHT?style=for-the-badge&color=0096ff&t=1745898420&label=LATEST" alt="Latest Release">
+<img src="https://img.shields.io/github/stars/dexifyink/MOONLIGHT?style=for-the-badge&color=0096ff&t=1745898420&label=STARS" alt="Stars">
+<img src="https://img.shields.io/github/license/dexifyink/MOONLIGHT?style=for-the-badge&color=0096ff&t=1745898420&label=LICENSE" alt="License">
 
 ---
 
@@ -55,8 +55,8 @@ A modernized external ESP featuring a sleek blue-accented UI, animated network p
 
 | Release | Downloads |
 |:--------|:----------|
-| **Total** | ![Total Downloads](https://img.shields.io/github/downloads/dexifyink/MOONLIGHT/total?color=0096ff&t=1&label=%20) |
-| **Latest** | ![Latest Downloads](https://img.shields.io/github/downloads/dexifyink/MOONLIGHT/latest/total?color=0096ff&t=1&label=%20) |
+| **Total** | ![Total Downloads](https://img.shields.io/github/downloads/dexifyink/MOONLIGHT/total?color=0096ff&t=1745898420&label=%20) |
+| **Latest** | ![Latest Downloads](https://img.shields.io/github/downloads/dexifyink/MOONLIGHT/latest/total?color=0096ff&t=1745898420&label=%20) |
 
 > � *Stats update automatically from GitHub release downloads*
 
