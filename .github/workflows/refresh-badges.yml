@@ -16,11 +16,29 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Update cache-bust timestamp in README
+      - name: Fetch stats from GitHub API
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Fetch all releases
+          RELEASES=$(gh api repos/dexifyink/MOONLIGHT/releases --paginate)
+
+          # Sum up total download counts
+          TOTAL=$(echo "$RELEASES" | jq '[.[].assets[].download_count // 0] | add // 0')
+
+          # Get latest release downloads
+          LATEST=$(echo "$RELEASES" | jq '.[0].assets[].download_count // 0' | awk '{s+=$1} END {print s}')
+
+          echo "Total downloads: $TOTAL"
+          echo "Latest downloads: $LATEST"
+
+          # Update download numbers in README between comment markers
+          sed -i "s|<!-- total-downloads -->.*<!-- /total-downloads -->|<!-- total-downloads -->${TOTAL}<!-- /total-downloads -->|" README.md
+          sed -i "s|<!-- latest-downloads -->.*<!-- /latest-downloads -->|<!-- latest-downloads -->${LATEST}<!-- /latest-downloads -->|" README.md
+
+          # Update badge URLs with cache-bust timestamp
           TIMESTAMP=$(date +%s)
-          # Replace any existing &t=<number> with the new timestamp
-          sed -i "s/&t=[0-9]*/\&t=${TIMESTAMP}/g" README.md
+          sed -i "s|<!-- stats-start -->.*<!-- stats-end -->|<!-- stats-start -->\n<img src=\"https://img.shields.io/github/downloads/dexifyink/MOONLIGHT/total?style=for-the-badge\&color=0096ff\&t=${TIMESTAMP}\&label=DOWNLOADS\" alt=\"Downloads\">\n<img src=\"https://img.shields.io/github/v/release/dexifyink/MOONLIGHT?style=for-the-badge\&color=0096ff\&t=${TIMESTAMP}\&label=LATEST\" alt=\"Latest Release\">\n<img src=\"https://img.shields.io/github/stars/dexifyink/MOONLIGHT?style=for-the-badge\&color=0096ff\&t=${TIMESTAMP}\&label=STARS\" alt=\"Stars\">\n<img src=\"https://img.shields.io/github/license/dexifyink/MOONLIGHT?style=for-the-badge\&color=0096ff\&t=${TIMESTAMP}\&label=LICENSE\" alt=\"License\">\n<!-- stats-end -->|" README.md
 
       - name: Commit and push if changed
         run: |
