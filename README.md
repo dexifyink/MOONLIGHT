@@ -55,8 +55,8 @@ A modernized external ESP featuring a sleek blue-accented UI, animated network p
 
 | Release | Downloads |
 |:--------|:----------|
-| **Total** | ![](../../.github/badges/total-downloads.svg) |
-| **Latest** | ![](../../.github/badges/latest-downloads.svg) |
+| **Total** | ![](.github/badges/total-downloads.svg) |
+| **Latest** | ![](.github/badges/latest-downloads.svg) |
 
 > � *Stats update automatically from GitHub release downloads*
 
