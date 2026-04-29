@@ -1,0 +1,29 @@
+name: Refresh Badges
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update cache-bust timestamp in README
+        run: |
+          TIMESTAMP=$(date +%s)
+          # Replace any existing &t=<number> with the new timestamp
+          sed -i "s/&t=[0-9]*/\&t=${TIMESTAMP}/g" README.md
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git diff --quiet README.md || (git add README.md && git commit -m "chore: refresh badge cache [skip ci]" && git push)
