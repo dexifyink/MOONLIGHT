@@ -4,12 +4,10 @@
 
 ### *External ESP for Counter-Strike 2*
 
-<!-- stats-start -->
-<img src="https://img.shields.io/github/downloads/dexifyink/MOONLIGHT/total?style=for-the-badge&color=0096ff&label=DOWNLOADS" alt="Downloads">
-<img src="https://img.shields.io/github/v/release/dexifyink/MOONLIGHT?style=for-the-badge&color=0096ff&label=LATEST" alt="Latest Release">
-<img src="https://img.shields.io/github/stars/dexifyink/MOONLIGHT?style=for-the-badge&color=0096ff&label=STARS" alt="Stars">
-<img src="https://img.shields.io/github/license/dexifyink/MOONLIGHT?style=for-the-badge&color=0096ff&label=LICENSE" alt="License">
-<!-- stats-end -->
+<img src=".github/badges/downloads.svg" alt="Downloads">
+<img src=".github/badges/latest.svg" alt="Latest Release">
+<img src=".github/badges/stars.svg" alt="Stars">
+<img src=".github/badges/license.svg" alt="License">
 
 ---
 
@@ -57,8 +55,8 @@ A modernized external ESP featuring a sleek blue-accented UI, animated network p
 
 | Release | Downloads |
 |:--------|:----------|
-| **Total** | <!-- total-downloads -->1<!-- /total-downloads --> |
-| **Latest** | <!-- latest-downloads -->1<!-- /latest-downloads --> |
+| **Total** | ![](../../.github/badges/total-downloads.svg) |
+| **Latest** | ![](../../.github/badges/latest-downloads.svg) |
 
 > � *Stats update automatically from GitHub release downloads*
 

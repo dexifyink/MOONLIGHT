@@ -16,32 +16,54 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Fetch stats from GitHub API
+      - name: Fetch stats and generate SVG badges
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Fetch all releases
+          mkdir -p .github/badges
+
+          # Fetch repo stats
+          REPO=$(gh api repos/dexifyink/MOONLIGHT)
+          STARS=$(echo "$REPO" | jq '.stargazers_count')
+          LICENSE_NAME=$(echo "$REPO" | jq -r '.license.spdx_id // "N/A"')
+
+          # Fetch releases for download counts
           RELEASES=$(gh api repos/dexifyink/MOONLIGHT/releases --paginate)
+          TOTAL_DL=$(echo "$RELEASES" | jq '[.[].assets[].download_count // 0] | add // 0')
+          LATEST_DL=$(echo "$RELEASES" | jq '.[0].assets[].download_count // 0' | awk '{s+=$1} END {print s}')
+          LATEST_TAG=$(echo "$RELEASES" | jq -r '.[0].tag_name // "none"')
 
-          # Sum up total download counts
-          TOTAL=$(echo "$RELEASES" | jq '[.[].assets[].download_count // 0] | add // 0')
+          echo "Stars: $STARS, Total DL: $TOTAL_DL, Latest DL: $LATEST_DL, Tag: $LATEST_TAG"
 
-          # Get latest release downloads
-          LATEST=$(echo "$RELEASES" | jq '.[0].assets[].download_count // 0' | awk '{s+=$1} END {print s}')
+          # SVG badge generator function (for-the-badge style, blue accent)
+          make_badge() {
+            local label="$1" value="$2" file="$3"
+            local label_w=$(( ${#label} * 11 + 20 ))
+            local value_w=$(( ${#value} * 14 + 24 ))
+            local total_w=$(( label_w + value_w ))
+            cat > ".github/badges/$file" <<SVG
+          <svg xmlns="http://www.w3.org/2000/svg" width="${total_w}" height="28" viewBox="0 0 ${total_w} 28">
+            <clipPath id="r"><rect width="${total_w}" height="28" rx="4"/></clipPath>
+            <g clip-path="url(#r)">
+              <rect width="${label_w}" height="28" fill="#2a2a3d"/>
+              <rect x="${label_w}" width="${value_w}" height="28" fill="#0096ff"/>
+            </g>
+            <text x="$(( label_w / 2 ))" y="18" text-anchor="middle" fill="#fff" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="1">${label}</text>
+            <text x="$(( label_w + value_w / 2 ))" y="18" text-anchor="middle" fill="#fff" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="12" font-weight="700">${value}</text>
+          </svg>
+          SVG
+          }
 
-          echo "Total downloads: $TOTAL"
-          echo "Latest downloads: $LATEST"
-
-          # Update download numbers in README between comment markers
-          sed -i "s|<!-- total-downloads -->.*<!-- /total-downloads -->|<!-- total-downloads -->${TOTAL}<!-- /total-downloads -->|" README.md
-          sed -i "s|<!-- latest-downloads -->.*<!-- /latest-downloads -->|<!-- latest-downloads -->${LATEST}<!-- /latest-downloads -->|" README.md
-
-          # Update badge URLs with cache-bust timestamp
-          TIMESTAMP=$(date +%s)
-          sed -i "s|<!-- stats-start -->.*<!-- stats-end -->|<!-- stats-start -->\n<img src=\"https://img.shields.io/github/downloads/dexifyink/MOONLIGHT/total?style=for-the-badge\&color=0096ff\&t=${TIMESTAMP}\&label=DOWNLOADS\" alt=\"Downloads\">\n<img src=\"https://img.shields.io/github/v/release/dexifyink/MOONLIGHT?style=for-the-badge\&color=0096ff\&t=${TIMESTAMP}\&label=LATEST\" alt=\"Latest Release\">\n<img src=\"https://img.shields.io/github/stars/dexifyink/MOONLIGHT?style=for-the-badge\&color=0096ff\&t=${TIMESTAMP}\&label=STARS\" alt=\"Stars\">\n<img src=\"https://img.shields.io/github/license/dexifyink/MOONLIGHT?style=for-the-badge\&color=0096ff\&t=${TIMESTAMP}\&label=LICENSE\" alt=\"License\">\n<!-- stats-end -->|" README.md
+          make_badge "DOWNLOADS"  "${TOTAL_DL}"    "downloads.svg"
+          make_badge "LATEST"     "${LATEST_TAG}"  "latest.svg"
+          make_badge "STARS"      "${STARS}"        "stars.svg"
+          make_badge "LICENSE"    "${LICENSE_NAME}" "license.svg"
+          make_badge "${TOTAL_DL}"  "" "total-downloads.svg"
+          make_badge "${LATEST_DL}" "" "latest-downloads.svg"
 
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git diff --quiet README.md || (git add README.md && git commit -m "chore: refresh badge cache [skip ci]" && git push)
+          git add .github/badges/
+          git diff --cached --quiet || (git commit -m "chore: refresh badges [skip ci]" && git push)
